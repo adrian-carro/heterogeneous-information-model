@@ -16,27 +16,18 @@ public class Agent{
 	float b;
 	float priceFund;
 
-public Agent(int initialState, float alpha, float beta, float price){
+public Agent(int initialState, float price){
 	this.state = initialState;
-	this.a = alpha;
-	this.b = beta;
 	this.priceFund = price;
 }
 // accessor methods
 public int getState(){return this.state;}
-public float getAlpha(){return this.a;}
-public float getBeta(){return this.b;}
 public float getPrice(){return this.priceFund;}
 
 public void setState(int newState){
 	this.state = newState;
 }
-public void setAlpha(float newA){
-	this.a = newA;
-}
-public void setBeta(float newB){
-	this.b = newB;
-}
+
 public void setPrice(float newPrice){
 	this.priceFund = newPrice;
 }
@@ -48,7 +39,7 @@ public void updateState(float marketPrice){
 }
 
 public static void main(String[] args) throws InterruptedException{
-	Agent a = new Agent(0,0.5f,0.5f, 10);
+	Agent a = new Agent(0, 10);
 	System.out.println(a.getState());
 	a.setState(1);
 	System.out.println(a.getState());
