@@ -79,13 +79,7 @@ public class HetInfoSimulation {
         // get previous state and set new state with new price
         int initState = a.getState();
         a.updateState(this.marketPrice);
-        // update overall state of population (n->optimist) (population-n -> pessimist)
-        // if (a.getState() - initState == 1){
-        // 	this.n -=1;
-        // }
-        // else if(a.getState() - initState == -1){
-        // 	this.n +=1;
-        // }
+        
         int newN = 0;
         for (Agent ag:this.agents ) {
             if (ag.getState() == 0) {
