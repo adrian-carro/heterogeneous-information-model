@@ -47,10 +47,10 @@ public class HetInfoSimulation {
         this.n = optimists;
     }
     // Accessor Methods
-    public int getState0(){
+    public int getStateBuy(){
         return this.n;
     }
-    public int getState1(){
+    public int getStateSell(){
         return this.population - this.n;
     }
     public float getMarketPrice(){
@@ -79,13 +79,13 @@ public class HetInfoSimulation {
         a.setPrice(newPrice);
         System.out.println("Current Market Price: "+ this.marketPrice);
         System.out.println("new fundamental price of Agent " + agent + ": " + newPrice);
-        // get previous state and set new state with new price
+        // STEP 2: Update Agents buy/sell position based on probability eqn of noise (temperature)
         int initState = a.getState();
-        a.updateState(this.marketPrice);
+        a.updateState(this.marketPrice, this.noise);
         
         int newN = 0;
         for (Agent ag:this.agents ) {
-            if (ag.getState() == 0) {
+            if (ag.getState() == 1) {
                 newN++;
             }
         }
@@ -95,21 +95,25 @@ public class HetInfoSimulation {
     }
 
     // update market price
-    public void priceUpdate(){
+    public void priceUpdateExp(){
         System.out.println( ((2*(float)this.n)/(float)this.population)-1 ) ;
         this.marketPrice = this.fundPrice0 * (float) Math.exp((double) ((2*(float)this.n)/(float)this.population)-1 );
         System.out.println("New Market Price:" + this.marketPrice +"\n----------------------------");
     }
-
+    // update market price
+    public void priceUpdateLin(){
+        this.marketPrice = this.fundPrice0 * ((2*this.n)/(float)this.population);
+        System.out.println("New Market Price:" + this.marketPrice +"\n----------------------------");
+    }
 
     public static void main(String[] args) throws InterruptedException, IOException {
         System.out.println("Hello World!");
 
-        HetInfoSimulation sim = new HetInfoSimulation(1,200,100,10.0f,0.9f);
-        for (int i=0;i<20; i++) {
-            sim.asynchronousUpdate();
-            sim.priceUpdate();
-        }
+        HetInfoSimulation sim = new HetInfoSimulation(1,200,100,0.5f,0.9f,0.5f);
+        // for (int i=0;i<20; i++) {
+        //     sim.asynchronousUpdate();
+        //     sim.priceUpdate();
+        // }
 
     }
 }
