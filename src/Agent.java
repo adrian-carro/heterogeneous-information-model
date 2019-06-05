@@ -15,10 +15,12 @@ public class Agent{
 	float a;
 	float b;
 	float priceFund;
+	Random r;
 
 public Agent(int initialState, float price){
 	this.state = initialState;
 	this.priceFund = price;
+	this.r = new Random();
 }
 // accessor methods
 public int getState(){return this.state;}
@@ -31,11 +33,19 @@ public void setState(int newState){
 public void setPrice(float newPrice){
 	this.priceFund = newPrice;
 }
-public void updateState(float marketPrice){
-	if ( (this.priceFund - marketPrice) > 0 ) {
-		setState(0);
+// Method for STEP 2 of Agent asynchronous update
+public void updateState(float marketPrice, float temp){
+	float probBuy = 0.0;
+	// check for division by 0
+	if( temp == 0){
+		probBuy = 1 / (1 + Math.exp(marketPrice - this.priceFund) );
 	}
-	else setState(1);
+	else probBuy = 1 / (1 + Math.exp( (marketPrice - this.priceFund)/temp ) );
+	// determine position change with random float
+	if(this.r.nextFloat() <= probBuy){
+		this.setState(1);
+	}
+	else this.setState(0);
 }
 
 public static void main(String[] args) throws InterruptedException{
