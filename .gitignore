@@ -3,5 +3,8 @@
 *.iml
 out
 
+# Ignore class files, wherever they are
+*.class
+
 # Ignore results folder
 /Results
