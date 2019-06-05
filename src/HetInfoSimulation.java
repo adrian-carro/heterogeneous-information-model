@@ -20,29 +20,31 @@ public class HetInfoSimulation {
     Agent [] agents;
     int population;
     float delta;
-    float fundPrice0;
-    float marketPrice;
+    float alpha;
+    float noise;
+    float fundPrice0 = 1;
+    float marketPrice = 1;
     Random r;
     int n;
     // constructor for the simulation
-    public HetInfoSimulation(int graphType, int population, int state0, float priceInit, float nbrInfluence){
+    public HetInfoSimulation(int graphType, int population, int optimists, float nbrInfluence, float agentTmp, float noise){
         this.g = new Graph(population,graphType);
         this.agents = new Agent[population];
         this.r = new Random();
         // populate list of agents
-        for (int i=0;i<state0 ;i++ ) {
-            this.agents[i] = new Agent(0,0.5f,0.5f, priceInit + (float) Math.abs(r.nextGaussian()) );
+        for (int i=0;i<optimists ;i++ ) {
+            this.agents[i] = new Agent(1, fundPrice0 + Math.abs(r.nextFloat()) );
 
         }
-        for (int i=state0;i<population;i++ ) {
-            this.agents[i] = new Agent(1,0.5f,0.5f,priceInit - (float) Math.abs(r.nextGaussian()) );
+        for (int i=optimists;i<population;i++ ) {
+            this.agents[i] = new Agent(0, fundPrice0 -  Math.abs(r.nextFloat()) );
         }
         // fill remaining fields
         this.population = population;
         this.delta = nbrInfluence;
-        this.fundPrice0 = priceInit;
-        this.marketPrice = priceInit;
-        this.n = state0;
+        this.alpha = agentTmp;
+        this.noise = noise;
+        this.n = optimists;
     }
     // Accessor Methods
     public int getState0(){
