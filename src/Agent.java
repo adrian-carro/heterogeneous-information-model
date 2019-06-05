@@ -35,12 +35,12 @@ public void setPrice(float newPrice){
 }
 // Method for STEP 2 of Agent asynchronous update
 public void updateState(float marketPrice, float temp){
-	float probBuy = 0.0;
+	float probBuy = 0.0f;
 	// check for division by 0
 	if( temp == 0){
-		probBuy = 1 / (1 + Math.exp(marketPrice - this.priceFund) );
+		probBuy = 1 / (1 + (float) Math.exp(marketPrice - this.priceFund) );
 	}
-	else probBuy = 1 / (1 + Math.exp( (marketPrice - this.priceFund)/temp ) );
+	else probBuy = 1 / (1 + (float) Math.exp( (marketPrice - this.priceFund)/temp ) );
 	// determine position change with random float
 	if(this.r.nextFloat() <= probBuy){
 		this.setState(1);
