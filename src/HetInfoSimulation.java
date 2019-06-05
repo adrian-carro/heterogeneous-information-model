@@ -69,11 +69,12 @@ public class HetInfoSimulation {
         for (int i=0; i < neighbors.length; i++ ) {
             totalPrice += this.agents[neighbors[i]].getPrice();
         }
-        // calculate new price
+        // STEP 1: calculate new price of Agent
         float initPrice = a.getPrice();
         System.out.println("initial fundamental price of Agent " + agent + " with state "+ a.getState() +": " + initPrice);
-        float newPrice = initPrice + ( ((totalPrice/neighbors.length) - initPrice)*(this.delta))
-                + ( ((1-this.delta)/2) * (this.marketPrice - initPrice) );
+
+        float newPrice = ((1-this.alpha)*initPrice) + (this.alpha *( ((totalPrice/neighbors.length)*(this.delta))
+                                                    +  ((1-this.delta) * (this.marketPrice)) ) );
         // set agent's new price
         a.setPrice(newPrice);
         System.out.println("Current Market Price: "+ this.marketPrice);
