@@ -69,19 +69,23 @@ public class HetInfoSimulation {
         for (int i=0; i < neighbors.length; i++ ) {
             totalPrice += this.agents[neighbors[i]].getPrice();
         }
+
         // STEP 1: calculate new price of Agent
         float initPrice = a.getPrice();
-        System.out.println("initial fundamental price of Agent " + agent + " with state "+ a.getState() +": " + initPrice);
+        System.out.println("Old fundamental price of agent " + agent + " with state " + a.getState() + ": "
+                + initPrice);
 
         float newPrice = ((1-this.alpha)*initPrice) + (this.alpha *( ((totalPrice/neighbors.length)*(this.delta))
                                                     +  ((1-this.delta) * (this.marketPrice)) ) );
         // set agent's new price
         a.setPrice(newPrice);
-        System.out.println("Current Market Price: "+ this.marketPrice);
-        System.out.println("new fundamental price of Agent " + agent + ": " + newPrice);
+
         // STEP 2: Update Agents buy/sell position based on probability eqn of noise (temperature)
         int initState = a.getState();
         a.updateState(this.marketPrice, this.noise);
+
+        System.out.println("New fundamental price of agent " + agent + " with new state " + a.getState() + ": "
+                + newPrice);
         
         int newN = 0;
         for (Agent ag:this.agents ) {
@@ -89,31 +93,31 @@ public class HetInfoSimulation {
                 newN++;
             }
         }
-        System.out.println(newN);
         this.n = newN;
-        System.out.println("optimists in the Market of 20: " + this.n);
+        System.out.println("New fraction of optimists: " + this.n/(float)this.population);
     }
 
     // update market price
     public void priceUpdateExp(){
+        System.out.println("Old Market Price:" + this.marketPrice);
         System.out.println( ((2*(float)this.n)/(float)this.population)-1 ) ;
         this.marketPrice = this.fundPrice0 * (float) Math.exp((double) ((2*(float)this.n)/(float)this.population)-1 );
         System.out.println("New Market Price:" + this.marketPrice +"\n----------------------------");
     }
     // update market price
     public void priceUpdateLin(){
+        System.out.println("Old Market Price:" + this.marketPrice);
         this.marketPrice = this.fundPrice0 * ((2*this.n)/(float)this.population);
         System.out.println("New Market Price:" + this.marketPrice +"\n----------------------------");
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        System.out.println("Hello World!");
 
-        HetInfoSimulation sim = new HetInfoSimulation(1,200,100,0.5f,0.9f,0.5f);
-        // for (int i=0;i<20; i++) {
-        //     sim.asynchronousUpdate();
-        //     sim.priceUpdate();
-        // }
+        HetInfoSimulation sim = new HetInfoSimulation(1,200,100,0.75f,0.5f,0.5f);
+         for (int i=0; i<20; i++) {
+             sim.asynchronousUpdate();
+             sim.priceUpdateLin();
+         }
 
     }
 }
